@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>森鹿 · Forest Deer</title>
+<title>Forest Deer</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   html,body { width:100%; height:100%; overflow:hidden; background:#030a07;
@@ -71,21 +71,21 @@
 <div id="hud"></div>
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="rec"><i></i><span id="recTime">0:00</span></div>
-<div id="top"><span class="tag" id="moteTag">光点 0</span><span class="tag" id="moodTag">日</span><span class="tag" id="deerTag">吃草</span></div>
-<div id="keys" aria-label="操作说明">
-  <div class="k"><span class="wasd"><span></span><kbd data-key="KeyW">W</kbd><span></span><kbd data-key="KeyA">A</kbd><kbd data-key="KeyS">S</kbd><kbd data-key="KeyD">D</kbd></span></div><span>走路</span>
-  <div class="k"><kbd data-key="ShiftLeft ShiftRight">Shift</kbd></div><span>小跑</span>
-  <div class="k"><kbd data-key="click">点击</kbd></div><span>走到那里</span>
-  <div class="k"><kbd data-key="drag">拖动</kbd></div><span>转镜头</span>
-  <div class="k"><kbd data-key="KeyE">E</kbd></div><span>轻唤小鹿</span>
-  <div class="k"><kbd data-key="KeyR">R</kbd></div><span>昼夜<span class="st" id="stMood">日</span></span>
-  <div class="k"><kbd data-key="KeyG">G</kbd></div><span>起风</span>
-  <div class="k"><kbd data-key="KeyC">C</kbd></div><span>电影镜头<span class="st" id="stCine">关</span></span>
-  <div class="k"><kbd data-key="KeyV">V</kbd></div><span>录制视频<span class="st" id="stRec">关</span></span>
-  <div class="k"><kbd data-key="KeyM">M</kbd></div><span>声音<span class="st" id="stSound">开</span></span>
-  <div class="k"><kbd data-key="Digit1">1</kbd><kbd data-key="Digit2">2</kbd><kbd data-key="Digit3">3</kbd><kbd data-key="Digit0">0</kbd></div><span>画质<span class="st" id="stQ">自动</span></span>
-  <div class="k"><kbd data-key="KeyH">H</kbd></div><span>隐藏面板</span>
-  <div class="tip">走近光点收集 · 靠近蝴蝶试试</div>
+<div id="top"><span class="tag" id="moteTag">Motes 0</span><span class="tag" id="moodTag">Day</span><span class="tag" id="deerTag">Grazing</span></div>
+<div id="keys" aria-label="Controls">
+  <div class="k"><span class="wasd"><span></span><kbd data-key="KeyW">W</kbd><span></span><kbd data-key="KeyA">A</kbd><kbd data-key="KeyS">S</kbd><kbd data-key="KeyD">D</kbd></span></div><span>Walk</span>
+  <div class="k"><kbd data-key="ShiftLeft ShiftRight">Shift</kbd></div><span>Trot</span>
+  <div class="k"><kbd data-key="click">Click</kbd></div><span>Walk there</span>
+  <div class="k"><kbd data-key="drag">Drag</kbd></div><span>Orbit camera</span>
+  <div class="k"><kbd data-key="KeyE">E</kbd></div><span>Call the deer</span>
+  <div class="k"><kbd data-key="KeyR">R</kbd></div><span>Day / night<span class="st" id="stMood">Day</span></span>
+  <div class="k"><kbd data-key="KeyG">G</kbd></div><span>Wind gust</span>
+  <div class="k"><kbd data-key="KeyC">C</kbd></div><span>Cinematic camera<span class="st" id="stCine">Off</span></span>
+  <div class="k"><kbd data-key="KeyV">V</kbd></div><span>Record video<span class="st" id="stRec">Off</span></span>
+  <div class="k"><kbd data-key="KeyM">M</kbd></div><span>Sound<span class="st" id="stSound">On</span></span>
+  <div class="k"><kbd data-key="Digit1">1</kbd><kbd data-key="Digit2">2</kbd><kbd data-key="Digit3">3</kbd></div><span>Quality<span class="st" id="stQ">High</span></span>
+  <div class="k"><kbd data-key="KeyH">H</kbd></div><span>Hide panel</span>
+  <div class="tip">Walk into the glowing motes · get close to the butterflies</div>
 </div>
 <div id="loader"><div class="mist"></div><div class="shaft"></div></div>
 
@@ -202,7 +202,7 @@ THREE.ShaderChunk.shadowmap_pars_fragment = THREE.ShaderChunk.shadowmap_pars_fra
 // ════════════════════════════════════════════════════════════
 const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance' });
 // 渲染倍率：Retina 按 2× 渲染时全屏后处理是 4 倍像素，帧率掉一半。从 1.25× 起步，由下面的自适应调节
-let renderScale = Math.min(devicePixelRatio, 1.25);
+let renderScale = Math.min(devicePixelRatio, 2);   // 默认最高画质（屏幕原生，最多 2×），不自动降档
 renderer.setPixelRatio(renderScale);
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.NoToneMapping;          // ACES 在合成 pass 里手写
@@ -1903,7 +1903,7 @@ function chime(i, vol = 0.1) {
 }
 
 const moteTag = document.getElementById('moteTag'), moodTag = document.getElementById('moodTag');
-const updateTag = () => { moteTag.textContent = `光点 ${collected}/${motes.length}`; moteTag.classList.toggle('on', collected === motes.length); };
+const updateTag = () => { moteTag.textContent = `Motes ${collected}/${motes.length}`; moteTag.classList.toggle('on', collected === motes.length); };
 updateTag();
 const deerChest = new THREE.Vector3();
 
@@ -1918,7 +1918,7 @@ function callDeer() {
   scareButterflies(deer.position, 6);
   deerAlertT = 3.5;
   chime(0, 0.05);
-  toast(n ? `小鹿抬头了，${n} 个光点朝它飘过来` : '小鹿抬起头看着你');
+  toast(n ? `The deer looks up · ${n} mote${n > 1 ? 's' : ''} drifting toward it` : 'The deer looks up at you');
 }
 
 // 昼夜：3 秒渐变。夜里太阳变成冷月光，光柱变弱，光点更亮（像萤火）
@@ -1978,7 +1978,7 @@ function updateFX(dt, t) {
         if (collected === motes.length) {
           boost = 1.6; respawnT = 30;
           setTimeout(() => { chime(5, 0.08); chime(7, 0.06); chime(9, 0.05); }, 350);
-          toast('光都回到了林子里');
+          toast('All the light has returned to the forest');
         }
       }
     }
@@ -2053,11 +2053,11 @@ addEventListener('keydown', (e) => {
   if (e.code === 'KeyE') callDeer();
   if (e.code === 'KeyR') {
     moodTarget = moodTarget ? 0 : 1;
-    moodTag.textContent = moodTarget ? '夜' : '日';
+    moodTag.textContent = moodTarget ? 'Night' : 'Day';
     moodTag.classList.toggle('on', !!moodTarget);
-    toast(moodTarget ? '入夜：月光和萤火' : '天亮了');
+    toast(moodTarget ? 'Night falls · moonlight and fireflies' : 'Morning returns');
   }
-  if (e.code === 'KeyM') { muted = !muted; toast(muted ? '已静音' : '声音开'); }
+  if (e.code === 'KeyM') { muted = !muted; toast(muted ? 'Sound off' : 'Sound on'); }
 });
 // 起风：6 秒一阵。草被压弯，蝴蝶被吹散，一声风声
 let gustT = 0;
@@ -2065,7 +2065,7 @@ function gust() {
   gustT = 6;
   for (const b of bfState) { b.scared = 2 + Math.random() * 2; b.v.set(2.2 + Math.random(), 0.8 + Math.random(), (Math.random() - 0.5) * 1.5); }
   whoosh();
-  toast('起风了');
+  toast('A gust of wind');
 }
 function whoosh() {
   if (muted) return;
@@ -2092,7 +2092,7 @@ function toggleCine(v = !cine.on) {
   controls.enabled = !v;
   if (v) { cine.t = 0; cine.a = Math.atan2(camera.position.x - deer.position.x, camera.position.z - deer.position.z); }
   else controls.target.set(deer.position.x, 1.2, deer.position.z);
-  if (!v) toast('电影镜头关');
+  if (!v) toast('Cinematic camera off');
 }
 const _cineLook = new THREE.Vector3();
 function updateCine(dt) {
@@ -2110,8 +2110,8 @@ const deerTag = document.getElementById('deerTag');
 let deerAlertT = 0, lastDeerState = '';
 function updateDeerTag(dt) {
   deerAlertT = Math.max(0, deerAlertT - dt);
-  const st = deerCtl.speed > 1.25 ? '小跑' : deerCtl.speed > 0.15 ? '走路' : deerAlertT > 0 ? '张望' : neck.amt > 0.6 ? '吃草' : '歇着';
-  if (st !== lastDeerState) { deerTag.textContent = st; deerTag.classList.toggle('on', st === '张望' || st === '小跑'); lastDeerState = st; }
+  const st = deerCtl.speed > 1.25 ? 'Trotting' : deerCtl.speed > 0.15 ? 'Walking' : deerAlertT > 0 ? 'Alert' : neck.amt > 0.6 ? 'Grazing' : 'Resting';
+  if (st !== lastDeerState) { deerTag.textContent = st; deerTag.classList.toggle('on', st === 'Alert' || st === 'Trotting'); lastDeerState = st; }
 }
 
 addEventListener('keydown', (e) => {
@@ -2599,7 +2599,7 @@ function updateStats() {
   fpsFrames = 0; fpsT0 = now;
   window.__stats = { fps, calls: renderer.info.render.calls, tris: renderer.info.render.triangles };
   window.__stats.scale = renderScale;
-  hud.textContent = `${fps} fps · ${window.__stats.calls} draw · ${(window.__stats.tris / 1000).toFixed(0)}k tri · ${renderScale}×${scaleLock !== null ? ' 锁定' : ' 自动'}`;
+  hud.textContent = `${fps} fps · ${window.__stats.calls} draw · ${(window.__stats.tris / 1000).toFixed(0)}k tri · ${renderScale}×${scaleLock !== null ? ' locked' : ' auto'}`;
   if (typeof adaptScale === 'function') adaptScale(fps);
 }
 
@@ -2626,7 +2626,7 @@ addEventListener('resize', applySize);
 // 自适应渲染倍率：每 1.5 秒看一次帧率，低于 52 就降一档，稳定在 59+ 一段时间再升一档。
 // 按 1 / 2 / 3 锁定 省电 / 平衡 / 高清，按 0 恢复自动
 const SCALE_STEPS = [0.6, 0.75, 0.9, 1.0, 1.25, 1.5, 2.0].filter((v) => v <= Math.max(devicePixelRatio, 1));
-let scaleIdx = Math.max(0, SCALE_STEPS.findIndex((v) => v >= renderScale)), scaleLock = null, goodSecs = 0;
+let scaleIdx = Math.max(0, SCALE_STEPS.findIndex((v) => v >= renderScale - 1e-3)), scaleLock = renderScale, goodSecs = 0;   // 锁定：adaptScale 不会改动
 // 自动模式最高只升到 1.5×；某一档掉过帧就记下来，之后不再升回去，避免在两档之间来回跳
 let scaleCeil = Math.max(0, SCALE_STEPS.findLastIndex((v) => v <= 1.5));
 function setScale(i) {
@@ -2664,9 +2664,8 @@ function adaptScale(fps) {
 addEventListener('keydown', (e) => {
   const preset = { Digit1: 0.75, Digit2: 1.0, Digit3: Math.min(devicePixelRatio, 2) }[e.code];
   if (preset) { scaleLock = preset; setScale(SCALE_STEPS.findIndex((v) => v >= preset - 1e-3)); }
-  if (e.code === 'Digit0') scaleLock = null;
-  const label = { Digit1: '省电', Digit2: '平衡', Digit3: '高清', Digit0: '自动' }[e.code];
-  if (label) toast(`画质：${label} · ${renderScale}×`);
+  const label = { Digit1: 'Low', Digit2: 'Medium', Digit3: 'High' }[e.code];
+  if (label) toast(`Quality: ${label} · ${renderScale}×`);
 });
 
 // ════════════════════════════════════════════════════════════
@@ -2681,7 +2680,7 @@ function pickMime() {
 }
 function toggleRec() {
   if (rec.mr) { rec.mr.stop(); return; }
-  if (!window.MediaRecorder || !renderer.domElement.captureStream) { toast('这个浏览器不支持网页内录制'); return; }
+  if (!window.MediaRecorder || !renderer.domElement.captureStream) { toast('In-page recording is not supported in this browser'); return; }
   rec.prevLock = scaleLock; scaleLock = renderScale;
   const stream = renderer.domElement.captureStream(60);
   const ad = (audioOut(), actx.createMediaStreamDestination());
@@ -2702,12 +2701,12 @@ function toggleRec() {
     stream.getTracks().forEach((t) => t.stop());
     rec.mr = null; scaleLock = rec.prevLock;
     document.body.classList.remove('rec');
-    toast(`视频已保存（${(blob.size / 1e6).toFixed(1)} MB）`);
+    toast(`Video saved (${(blob.size / 1e6).toFixed(1)} MB)`);
   };
   mr.start(1000);
   rec.mr = mr; rec.t0 = performance.now();
   document.body.classList.add('rec');
-  toast('开始录制 · 再按 V 停止');
+  toast('Recording · press V again to stop');
 }
 {
   const recTime = document.getElementById('recTime');
@@ -2726,16 +2725,15 @@ addEventListener('keydown', (e) => { if (e.code === 'KeyV' && !e.repeat) toggleR
   const capsFor = (code) => caps.filter((k) => k.dataset.key.split(' ').includes(code));
   const flash = (code, ms = 180) => capsFor(code).forEach((k) => { k.classList.add('down'); setTimeout(() => k.classList.remove('down'), ms); });
   const stMood = document.getElementById('stMood'), stSound = document.getElementById('stSound'), stQ = document.getElementById('stQ');
-  const QNAME = { 0.75: '省电', 1: '平衡' };
+  const QNAME = { 0.75: 'Low', 1: 'Medium' };
   function syncState() {
-    stMood.textContent = moodTarget ? '夜' : '日';
-    stSound.textContent = muted ? '关' : '开';
-    document.getElementById('stCine').textContent = cine.on ? '开' : '关';
-    document.getElementById('stRec').textContent = rec.mr ? '录制中' : '关';
+    stMood.textContent = moodTarget ? 'Night' : 'Day';
+    stSound.textContent = muted ? 'Off' : 'On';
+    document.getElementById('stCine').textContent = cine.on ? 'On' : 'Off';
+    document.getElementById('stRec').textContent = rec.mr ? 'Recording' : 'Off';
     capsFor('KeyV')[0].classList.toggle('on', !!rec.mr);
     capsFor('KeyC')[0].classList.toggle('on', cine.on);
-    stQ.textContent = scaleLock === null ? `自动 ${renderScale}×` : (QNAME[scaleLock] || '高清');
-    capsFor('Digit0')[0].classList.toggle('on', scaleLock === null);
+    stQ.textContent = scaleLock === null ? `Auto ${renderScale}×` : (QNAME[scaleLock] || 'High');
     capsFor('Digit1')[0].classList.toggle('on', scaleLock === 0.75);
     capsFor('Digit2')[0].classList.toggle('on', scaleLock === 1);
     capsFor('Digit3')[0].classList.toggle('on', scaleLock !== null && scaleLock > 1);

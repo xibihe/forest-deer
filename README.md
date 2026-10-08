@@ -1,7 +1,9 @@
-# 森鹿 · Forest Deer
+# Forest Deer
 
-一只小鹿在屋久岛式的巨杉林里漫步。实时 three.js 场景：体积光、软阴影、光点收集、蝴蝶、昼夜、起风、电影镜头、网页内录制。
+A young deer wandering through a giant Yakushima-style cedar forest. Real-time three.js scene with volumetric god rays, soft shadows, collectible light motes, butterflies, day/night, wind, a cinematic camera and in-page video recording.
 
-操作：WASD 或点地面走 · Shift 小跑 · E / 点小鹿 轻唤 · R 昼夜 · G 起风 · C 电影镜头 · V 录制 · M 声音 · 1/2/3/0 画质 · H 隐藏面板
+The deer was generated with the Tripo 2.0 API (model → smart low-poly → rig check → quadruped auto-rig → walk animation). The forest is fully procedural, written with Claude Opus 5.5.
 
-贴图来自 Poly Haven（CC0）。
+Controls: WASD or click the ground to walk · Shift trot · E / click the deer to call it · R day/night · G wind gust · C cinematic camera · V record video · M sound · 1/2/3 quality · H hide panel
+
+Textures from Poly Haven (CC0).
